@@ -25,7 +25,7 @@ test('basic route', () => {
   },
 ];
   const obj = main(routes, { path: '/courses', method: 'GET' });
-  expect(obj.serve().body).toEqual('courses!');
+  expect(obj.serve().handler.body).toEqual('courses!');
 });
 
 test('wrong route', () => {
@@ -46,7 +46,7 @@ test('wrong route', () => {
   },
 ];
   const obj = main(routes, { path: '/wrong'});
-  expect(obj.serve().body).toEqual('Wrong route!');
+  expect(obj.serve().handler.body).toEqual('Wrong route!');
 });
 
 test('dynamic route', () => {
@@ -67,7 +67,7 @@ test('dynamic route', () => {
   },
 ];
   const obj = main(routes, { path: '/courses/slon/exercises/1' });
-  expect(obj.serve().body).toEqual('exercise');
+  expect(obj.serve().handler.body).toEqual('exercise');
 });
 
 test('dynamic route2', () => {
@@ -91,7 +91,7 @@ test('dynamic route2', () => {
   //console.log('slon'.match('^([^/]+)$'));
   const obj = main(routes, { path: '/courses/slon/exercises/1' });
   console.log(obj.serve());
-  expect(obj.serve().body).toEqual('exercise');
+  expect(obj.serve().handler.body).toEqual('exercise');
 });
 
 test('root case', () => {
@@ -119,5 +119,5 @@ test('root case', () => {
 ];
 
   const obj = main(routes, { path: '/' });
-  expect(obj.serve().body).toEqual('root');
+  expect(obj.serve().handler.body).toEqual('root');
 });

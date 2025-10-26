@@ -40,10 +40,10 @@ export default class Trie {
     }
 
     if (node.end && node.method === method) {
-      return {'params': params, 'body': node.handler.body}
+      return {'params': params, 'handler': {'body': node.handler.body}}
     }
 
-    return {'params': params, 'body': 'Wrong route!'};
+    return {'params': params, 'handler': {'body': 'Wrong route!'}};
   }
 
   insert(route) {
