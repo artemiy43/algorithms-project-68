@@ -20,6 +20,7 @@ export default class Trie {
   }
 
   getHandler(word, method) {
+    console.log('word', word);
     const words = word ? word.split('/') : [''];
     let node = this
     for (let i = 0; i < words.length; i++) {
