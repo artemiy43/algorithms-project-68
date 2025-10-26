@@ -24,7 +24,7 @@ export default class Trie {
     const params = {};
     const words = path ? path.split('/') : [''];
     let node = this;
-    for (let i = 0; i < words.length; i++) {
+    for (let i = 0; i < words.length; i += 1) {
       if (node.children[words[i]]) {
         node = node.children[words[i]];
         continue;
@@ -51,7 +51,7 @@ export default class Trie {
     const words = route.path.split('/');
     let node = this;
 
-    for (let i = 0; i < words.length; i++) {
+    for (let i = 0; i < words.length; i += 1) {
       let key = '';
       let reg = '';
       if (words[i].startsWith(':') && route.constraints && route.constraints[words[i].replace(':', '')]) {
