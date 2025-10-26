@@ -1,6 +1,6 @@
 import Trie from './helper.js';
 
-const serve = (routes, {path, method}) => {
+const serve = (routes, {path, method = 'GET'}) => {
     const root = new Trie(null);
     for (let route of routes) {
         root.insert(route);

@@ -84,12 +84,12 @@ test('dynamic route2', () => {
     handler: {
       body: 'exercise'
     },
-    constraints: { course_id: '^[a-z]+$' },
+    constraints: { course_id: '[a-z]' },
   },
 ];
 
   //console.log('slon'.match('^([^/]+)$'));
-  const obj = main(routes, { path: '/courses/slon/exercises/1' });
+  const obj = main(routes, { path: '/courses/slon/exercises/a' });
   console.log(obj.serve());
   expect(obj.serve().handler.body).toEqual('exercise');
 });
