@@ -1,0 +1,71 @@
+import { expect, test } from '@jest/globals';
+import main from '../index.js';
+
+test('basic route', () => {
+  const routes = [
+  {
+    method: 'POST',
+    path: '/courses',
+    handler: {
+      body: 'created courses!'
+    },
+  },
+  {
+    method: 'GET',
+    path: '/courses',
+    handler: {
+      body: 'courses!'
+    },
+  },
+  {
+    path: '/courses/basics',
+    handler: {
+      body: 'basics'
+    },
+  },
+];
+  const obj = main(routes, '/courses', 'GET');
+  expect(obj.serve().body).toEqual('courses!');
+});
+
+test('wrong route', () => {
+  const routes = [
+  {
+    method: 'GET',
+    path: '/courses',
+    handler: {
+      body: 'courses'
+    },
+  },
+  {
+    method: 'GET',
+    path: '/courses/basics',
+    handler: {
+      body: 'basics'
+    },
+  },
+];
+  const obj = main(routes, '/wrong');
+  expect(obj.serve().body).toEqual('Wrong route!');
+});
+
+test('dynamic route', () => {
+  const routes = [
+  {
+    path: '/courses/:id',
+    handler: {
+      body: 'course'
+    },
+    constraints: { id: '\\d+' },
+  },
+  {
+    path: '/courses/:course_id/exercises/:id',
+    handler: {
+      body: 'exercise'
+    },
+    constraints: { id: '\\d+', course_id: '^[a-z]+$' },
+  },
+];
+  const obj = main(routes, '/courses/slon/exercises/1');
+  expect(obj.serve().body).toEqual('exercise');
+});
