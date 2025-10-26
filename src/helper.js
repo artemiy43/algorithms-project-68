@@ -28,14 +28,15 @@ export default class Trie {
       if (node.children[words[i]]) {
         node = node.children[words[i]];
       } else if (node.children && !node.children[words[i]]) {
-        for (let child of Object.keys(node.children)) {
+        const currentNode = node;
+        Object.keys(node.children).forEach((child) => {
           if (node.children[child]
             && node.children[child].regExp
             && words[i].match(node.children[child].regExp)) {
-            node = node.children[child];
+            node = currentNode.children[child];
             params[child.replace(':', '')] = words[i];
           }
-        };
+        });
       }
     }
 
