@@ -92,3 +92,31 @@ test('dynamic route2', () => {
   const obj = main(routes, '/courses/slon/exercises/1');
   expect(obj.serve().body).toEqual('exercise');
 });
+
+test('dynamic route2', () => {
+  const routes = [
+  {
+    path: '/courses/:id',
+    handler: {
+      body: 'course'
+    },
+    constraints: { id: '\\d+' },
+  },
+  {
+    path: '/courses/:course_id/exercises/:id',
+    handler: {
+      body: 'exercise'
+    },
+    constraints: { course_id: '^[a-z]+$' },
+  },
+  {
+    path: '/',
+    handler: {
+      body: 'root'
+    },
+  },
+];
+
+  const obj = main(routes, '/');
+  expect(obj.serve().body).toEqual('root');
+});
