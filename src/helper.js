@@ -49,9 +49,18 @@ export default class Trie {
     let node = this
 
     for (let i = 0; i < words.length; i++) {
-      const key = words[i].startsWith(':')
-        ? route.constraints[words[i].replace(':', '')]
-        : words[i];
+      let key = '';
+      if (words[i].startsWith(':') && route.constraints && route.constraints[words[i].replace(':', '')]) {
+        key = route.constraints[words[i].replace(':', '')];
+      } else if (words[i].startsWith(':') && (!route.constraints || !route.constraints[words[i].replace(':', '')])) {
+        key = '^([^/]+)$';
+      } else if (!words[i].startsWith(':')) {
+        key = words[i];
+      }
+      console.log('key: ', key);
+      // const key = words[i].startsWith(':')
+      //   ? route.constraints[words[i].replace(':', '')]
+      //   : words[i];
 
       if (!node.children[key]) {
         node.children[key] = new Trie(key, node)
