@@ -1,11 +1,11 @@
 export default class Trie {
   constructor(key, parent = null, reg = '') {
-    this.key = key,
-    this.children = {},
-    this.parent = parent,
-    this.end = false,
-    this.handler = null,
-    this.method = '',
+    this.key = key;
+    this.children = {};
+    this.parent = parent;
+    this.end = false;
+    this.handler = null;
+    this.method = '';
     this.regExp = reg;
   }
 
@@ -28,22 +28,22 @@ export default class Trie {
       if (node.children[words[i]]) {
         node = node.children[words[i]];
       } else if (node.children && !node.children[words[i]]) {
-        Object.keys(node.children).forEach((child) => {
+        for (let child of Object.keys(node.children)) {
           if (node.children[child]
             && node.children[child].regExp
             && words[i].match(node.children[child].regExp)) {
             node = node.children[child];
             params[child.replace(':', '')] = words[i];
           }
-        });
+        };
       }
     }
 
     if (node.end && node.method === method) {
-      return { params, handler: { body: node.handler.body }};
+      return { params, handler: { body: node.handler.body } };
     }
 
-    return { params, handler: { body: 'Wrong route!' }};
+    return { params, handler: { body: 'Wrong route!' } };
   }
 
   insert(route) {
