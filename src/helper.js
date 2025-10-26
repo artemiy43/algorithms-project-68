@@ -24,21 +24,21 @@ export default class Trie {
     const params = {};
     const words = path ? path.split('/') : [''];
     let node = this;
-    words.forEach(word => {
-      if (node.children[word]) {
-        node = node.children[word];
-      }
-      else if (node.children && !node.children[word]) {
+    for (let i = 0; i < words.length; i++) {
+      if (node.children[words[i]]) {
+        node = node.children[words[i]];
+        continue;
+      } else if (node.children) {
         Object.keys(node.children).forEach((child) => {
           if (node.children[child]
             && node.children[child].regExp
-            && word.match(node.children[child].regExp)) {
+            && words[i].match(node.children[child].regExp)) {
             node = node.children[child];
-            params[child.replace(':', '')] = word;
+            params[child.replace(':', '')] = words[i];
           }
         });
       }
-    });
+    }
 
     if (node.end && node.method === method) {
       return { params, handler: { body: node.handler.body }};
@@ -51,17 +51,17 @@ export default class Trie {
     const words = route.path.split('/');
     let node = this;
 
-    words.forEach(word => {
+    for (let i = 0; i < words.length; i++) {
       let key = '';
       let reg = '';
-      if (word.startsWith(':') && route.constraints && route.constraints[word.replace(':', '')]) {
-        reg = route.constraints[word.replace(':', '')];
-      } else if (word.startsWith(':') && (!route.constraints || !route.constraints[word.replace(':', '')])) {
+      if (words[i].startsWith(':') && route.constraints && route.constraints[words[i].replace(':', '')]) {
+        reg = route.constraints[words[i].replace(':', '')];
+      } else if (words[i].startsWith(':') && (!route.constraints || !route.constraints[words[i].replace(':', '')])) {
         reg = '^([^/]+)$';
-      } else if (!word.startsWith(':')) {
+      } else if (!words[i].startsWith(':')) {
         reg = '';
       }
-      key = word;
+      key = words[i];
 
       if (!node.children[key]) {
         node.children[key] = new Trie(key, node, reg);
@@ -74,6 +74,6 @@ export default class Trie {
         node.handler = route.handler;
         node.method = route.method ? route.method : 'GET';
       }
-    });
+    }
   }
 }
