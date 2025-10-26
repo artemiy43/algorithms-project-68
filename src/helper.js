@@ -6,7 +6,7 @@ export default class Trie {
     this.end = false,
     this.handler = null,
     this.method = '',
-    this.regExp = reg
+    this.regExp = reg;
   }
 
   getWord() {
@@ -20,7 +20,7 @@ export default class Trie {
     return output.join('');
   }
 
-  getHandler({path, method}) { 
+  getHandler({ path, method }) { 
     const params = {};
     const words = path ? path.split('/') : [''];
     let node = this;
@@ -30,7 +30,7 @@ export default class Trie {
         continue;
       }
       else if (node.children) {
-        Object.keys(node.children).forEach(child => {
+        Object.keys(node.children).forEach((child) => {
           if (node.children[child]
             && node.children[child].regExp
             && words[i].match(node.children[child].regExp)) {
@@ -42,10 +42,10 @@ export default class Trie {
     }
 
     if (node.end && node.method === method) {
-      return {params: params, handler: {body: node.handler.body}};
+      return { params, handler: {body: node.handler.body }};
     }
 
-    return {params: params, handler: {body: 'Wrong route!'}};
+    return { params, handler: { body: 'Wrong route!' }};
   }
 
   insert(route) {

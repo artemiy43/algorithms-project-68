@@ -45,7 +45,7 @@ test('wrong route', () => {
       },
     },
   ];
-  const obj = main(routes, { path: '/wrong'});
+  const obj = main(routes, { path: '/wrong' });
   expect(obj.serve().handler.body).toEqual('Wrong route!');
 });
 
