@@ -24,19 +24,23 @@ export default class Trie {
     const params = {};
     const words = path ? path.split('/') : [''];
     let node = this;
+
     for (let i = 0; i < words.length; i += 1) {
       if (node.children[words[i]]) {
         node = node.children[words[i]];
       } else if (node.children && !node.children[words[i]]) {
-        const currentNode = node;
-        Object.keys(node.children).forEach((child) => {
-          if (node.children[child]
-            && node.children[child].regExp
-            && words[i].match(node.children[child].regExp)) {
-            node = currentNode.children[child];
+        const childrenKeys = Object.keys(node.children);
+        for (const child of childrenKeys) {
+          if (
+            node.children[child] &&
+            node.children[child].regExp &&
+            words[i].match(node.children[child].regExp)
+          ) {
+            node = node.children[child];
             params[child.replace(':', '')] = words[i];
+            break;
           }
-        });
+        }
       }
     }
 
