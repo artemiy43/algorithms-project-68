@@ -1,11 +1,12 @@
 export default class Trie {
-  constructor(key, parent = null) {
+  constructor(key, parent = null, reg = '') {
     this.key = key
     this.children = {}
     this.parent = parent
     this.end = false
     this.handler = null
     this.method = ''
+    this.regExp = reg
   }
 
   getWord() {
@@ -20,7 +21,7 @@ export default class Trie {
   }
 
   getHandler({path, method}) {
-    console.log('word', path);
+    let params = {};
     const words = path ? path.split('/') : [''];
     let node = this
     for (let i = 0; i < words.length; i++) {
@@ -30,18 +31,19 @@ export default class Trie {
       }
       else if (node.children) {
         for (let child of Object.keys(node.children)) {
-          if (words[i].match(child)) {
+          if (child && node.children[child].regExp && words[i].match(node.children[child].regExp)) {
             node = node.children[child];
+            params[child.replace(':', '')] = words[i]
           }
         }
       }
     }
 
     if (node.end && node.method === method) {
-      return node.handler
+      return {'params': params, 'body': node.handler.body}
     }
 
-    return {body: 'Wrong route!'};
+    return {'params': params, 'body': 'Wrong route!'};
   }
 
   insert(route) {
@@ -50,20 +52,19 @@ export default class Trie {
 
     for (let i = 0; i < words.length; i++) {
       let key = '';
+      let reg = '';
       if (words[i].startsWith(':') && route.constraints && route.constraints[words[i].replace(':', '')]) {
-        key = route.constraints[words[i].replace(':', '')];
+        //key = route.constraints[words[i].replace(':', '')];
+        reg = route.constraints[words[i].replace(':', '')]
       } else if (words[i].startsWith(':') && (!route.constraints || !route.constraints[words[i].replace(':', '')])) {
-        key = '^([^/]+)$';
+        reg = '^([^/]+)$';
       } else if (!words[i].startsWith(':')) {
-        key = words[i];
+        reg = '';
       }
-      console.log('key: ', key);
-      // const key = words[i].startsWith(':')
-      //   ? route.constraints[words[i].replace(':', '')]
-      //   : words[i];
+      key = words[i];
 
       if (!node.children[key]) {
-        node.children[key] = new Trie(key, node)
+        node.children[key] = new Trie(key, node, reg);
       }
 
       node = node.children[key]

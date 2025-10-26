@@ -88,12 +88,13 @@ test('dynamic route2', () => {
   },
 ];
 
-  console.log('slon'.match('^([^/]+)$'));
+  //console.log('slon'.match('^([^/]+)$'));
   const obj = main(routes, { path: '/courses/slon/exercises/1' });
+  console.log(obj.serve());
   expect(obj.serve().body).toEqual('exercise');
 });
 
-test('dynamic route2', () => {
+test('root case', () => {
   const routes = [
   {
     path: '/courses/:id',
