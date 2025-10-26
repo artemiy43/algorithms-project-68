@@ -31,7 +31,7 @@ export default class Trie {
       }
       else if (node.children) {
         for (let child of Object.keys(node.children)) {
-          if (child && node.children[child].regExp && words[i].match(node.children[child].regExp)) {
+          if (node.children[child] && node.children[child].regExp && words[i].match(node.children[child].regExp)) {
             node = node.children[child];
             params[child.replace(':', '')] = words[i]
           }
@@ -98,9 +98,9 @@ export default class Trie {
   }
 }
 
-const toRegExp = (path) => {
-  const escaped = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = escaped.replace(/:(\w+)/g, '([^/]+)');
+// const toRegExp = (path) => {
+//   const escaped = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+//   const pattern = escaped.replace(/:(\w+)/g, '([^/]+)');
 
-  return new RegExp(`^${pattern}$`);
-};
+//   return new RegExp(`^${pattern}$`);
+// };
