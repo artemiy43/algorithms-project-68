@@ -20,29 +20,28 @@ export default class Trie {
     return output.join('');
   }
 
-  getHandler({ path, method }) { 
+  getHandler({ path, method }) {
     const params = {};
     const words = path ? path.split('/') : [''];
     let node = this;
-    for (let i = 0; i < words.length; i++) {
-      if (node.children[words[i]]) {
-        node = node.children[words[i]];
-        continue;
+    words.forEach(word => {
+      if (node.children[word]) {
+        node = node.children[word];
       }
-      else if (node.children) {
+      else if (node.children && !node.children[word]) {
         Object.keys(node.children).forEach((child) => {
           if (node.children[child]
             && node.children[child].regExp
-            && words[i].match(node.children[child].regExp)) {
+            && word.match(node.children[child].regExp)) {
             node = node.children[child];
-            params[child.replace(':', '')] = words[i];
+            params[child.replace(':', '')] = word;
           }
         });
       }
-    }
+    });
 
     if (node.end && node.method === method) {
-      return { params, handler: {body: node.handler.body }};
+      return { params, handler: { body: node.handler.body }};
     }
 
     return { params, handler: { body: 'Wrong route!' }};
@@ -52,17 +51,17 @@ export default class Trie {
     const words = route.path.split('/');
     let node = this;
 
-    for (let i = 0; i < words.length; i++) {
+    words.forEach(word => {
       let key = '';
       let reg = '';
-      if (words[i].startsWith(':') && route.constraints && route.constraints[words[i].replace(':', '')]) {
-        reg = route.constraints[words[i].replace(':', '')];
-      } else if (words[i].startsWith(':') && (!route.constraints || !route.constraints[words[i].replace(':', '')])) {
+      if (word.startsWith(':') && route.constraints && route.constraints[word.replace(':', '')]) {
+        reg = route.constraints[word.replace(':', '')];
+      } else if (word.startsWith(':') && (!route.constraints || !route.constraints[word.replace(':', '')])) {
         reg = '^([^/]+)$';
-      } else if (!words[i].startsWith(':')) {
+      } else if (!word.startsWith(':')) {
         reg = '';
       }
-      key = words[i];
+      key = word;
 
       if (!node.children[key]) {
         node.children[key] = new Trie(key, node, reg);
@@ -75,6 +74,6 @@ export default class Trie {
         node.handler = route.handler;
         node.method = route.method ? route.method : 'GET';
       }
-    }
+    });
   }
 }
