@@ -27,8 +27,7 @@ export default class Trie {
     for (let i = 0; i < words.length; i += 1) {
       if (node.children[words[i]]) {
         node = node.children[words[i]];
-        continue;
-      } else if (node.children) {
+      } else if (node.children && !node.children[words[i]]) {
         Object.keys(node.children).forEach((child) => {
           if (node.children[child]
             && node.children[child].regExp
