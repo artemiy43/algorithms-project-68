@@ -30,14 +30,14 @@ export default class Trie {
         node = node.children[words[i]];
       } else if (node.children && !node.children[words[i]]) {
         const childrenKeys = Object.keys(node.children);
-        for (const child of childrenKeys) {
+        for (let j = 0; j < childrenKeys.length; j += 1) {
           if (
-            node.children[child] &&
-            node.children[child].regExp &&
-            words[i].match(node.children[child].regExp)
+            node.children[childrenKeys[j]]
+            && node.children[childrenKeys[j]].regExp
+            && words[i].match(node.children[childrenKeys[j]].regExp)
           ) {
-            node = node.children[child];
-            params[child.replace(':', '')] = words[i];
+            node = node.children[childrenKeys[j]];
+            params[childrenKeys[j].replace(':', '')] = words[i];
             break;
           }
         }
