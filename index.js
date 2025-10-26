@@ -7,8 +7,7 @@ const main = (routes, {path, method = 'GET'}) => {
             return serve(this.routes, {path, method});
         }
     };
-    console.log('routes:', routes);
-    console.log('path and method:', JSON.stringify({path, method}));
+
     return object;
 };
 

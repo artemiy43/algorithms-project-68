@@ -5,6 +5,8 @@ const serve = (routes, {path, method}) => {
     for (let route of routes) {
         root.insert(route);
     }
+    console.log('routes:', routes);
+    console.log('path and method:', JSON.stringify({path, method}));
     return root.getHandler({path, method});
 };
 
