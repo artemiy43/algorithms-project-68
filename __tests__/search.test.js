@@ -24,7 +24,7 @@ test('basic route', () => {
     },
   },
 ];
-  const obj = main(routes, '/courses', 'GET');
+  const obj = main(routes, { path: '/courses', method: 'GET' });
   expect(obj.serve().body).toEqual('courses!');
 });
 
@@ -45,7 +45,7 @@ test('wrong route', () => {
     },
   },
 ];
-  const obj = main(routes, '/wrong');
+  const obj = main(routes, { path: '/wrong'});
   expect(obj.serve().body).toEqual('Wrong route!');
 });
 
@@ -66,7 +66,7 @@ test('dynamic route', () => {
     constraints: { id: '\\d+', course_id: '^[a-z]+$' },
   },
 ];
-  const obj = main(routes, '/courses/slon/exercises/1');
+  const obj = main(routes, { path: '/courses/slon/exercises/1' });
   expect(obj.serve().body).toEqual('exercise');
 });
 
@@ -89,7 +89,7 @@ test('dynamic route2', () => {
 ];
 
   console.log('slon'.match('^([^/]+)$'));
-  const obj = main(routes, '/courses/slon/exercises/1');
+  const obj = main(routes, { path: '/courses/slon/exercises/1' });
   expect(obj.serve().body).toEqual('exercise');
 });
 
@@ -117,6 +117,6 @@ test('dynamic route2', () => {
   },
 ];
 
-  const obj = main(routes, '/');
+  const obj = main(routes, { path: '/' });
   expect(obj.serve().body).toEqual('root');
 });

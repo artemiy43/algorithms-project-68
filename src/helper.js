@@ -19,9 +19,9 @@ export default class Trie {
     return output.join('')
   }
 
-  getHandler(word, method) {
-    console.log('word', word);
-    const words = word ? word.split('/') : [''];
+  getHandler({path, method}) {
+    console.log('word', path);
+    const words = path ? path.split('/') : [''];
     let node = this
     for (let i = 0; i < words.length; i++) {
       if (node.children[words[i]]) {
@@ -29,7 +29,6 @@ export default class Trie {
         continue
       }
       else if (node.children) {
-        //node = node.children['*'];
         for (let child of Object.keys(node.children)) {
           if (words[i].match(child)) {
             node = node.children[child];
